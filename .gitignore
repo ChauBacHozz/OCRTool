@@ -5,3 +5,6 @@
 /dist
 /output
 /test_AI
+__pycache__/
+*.egg-info/
+*.pyc

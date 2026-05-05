@@ -1,0 +1,7 @@
+openai
+instructor
+pydantic
+openpyxl
+customtkinter
+pillow
+pyinstaller

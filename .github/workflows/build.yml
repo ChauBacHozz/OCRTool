@@ -1,0 +1,53 @@
+name: Build Cross-Platform
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - name: windows-latest
+            pyinstaller-flags: --windowed
+            suffix: .exe
+          - name: macos-latest
+            pyinstaller-flags: ""
+            suffix: ""
+          - name: ubuntu-latest
+            pyinstaller-flags: ""
+            suffix: ""
+      fail-fast: false
+
+    runs-on: ${{ matrix.os.name }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --noconfirm \
+            --onefile \
+            ${{ matrix.os.pyinstaller-flags }} \
+            --collect-all customtkinter \
+            --collect-all PIL \
+            --name OCRTool \
+            ocr_gui.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCRTool-${{ matrix.os.name }}
+          path: dist/OCRTool*
