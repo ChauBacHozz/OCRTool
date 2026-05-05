@@ -6,6 +6,9 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
@@ -13,13 +16,10 @@ jobs:
         os:
           - name: windows-latest
             pyinstaller-flags: --windowed
-            suffix: .exe
           - name: macos-latest
             pyinstaller-flags: ""
-            suffix: ""
           - name: ubuntu-latest
             pyinstaller-flags: ""
-            suffix: ""
       fail-fast: false
 
     runs-on: ${{ matrix.os.name }}
@@ -52,3 +52,16 @@ jobs:
         with:
           name: OCRTool-${{ matrix.os.name }}
           path: dist/OCRTool*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: artifacts/**/*
