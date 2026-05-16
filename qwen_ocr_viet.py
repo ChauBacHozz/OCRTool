@@ -29,9 +29,12 @@ def ocr_vietnamese(image_path: str, api_url: str = "http://88.2.0.63:8000/v1"):
                     {
                         "type": "text",
                         "text": (
-                            "Hãy trích xuất toàn bộ văn bản tiếng Việt có trong ảnh này. "
-                            "Giữ nguyên cấu trúc, xuống dòng, bảng biểu nếu có. "
-                            "Chỉ trả về nội dung văn bản, không thêm giải thích."
+                            "Trích xuất thông tin từ ảnh văn bản tiếng Việt theo các trường sau:\n"
+                            "- so_giay_phep: số giấy phép/quyết định\n"
+                            "- loai_giay_phep: loại giấy phép (Giấy phép lao động, Quyết định, Giấy chứng nhận, Công văn...)\n"
+                            "- hieuluc: thời hạn hiệu lực. QUAN TRỌNG: nếu văn bản ghi 'có giá trị x năm kể từ ngày ký' thì phải tìm ngày ký trên văn bản và tính ra khoảng thời gian cụ thể (VD: ngày ký 15/03/2022, 'có giá trị 3 năm' → '15/03/2022 - 14/03/2025'). KHÔNG được ghi lại nguyên văn câu 'có giá trị x năm kể từ ngày ký'.\n"
+                            "- coso: cơ sở/tổ chức được nhắc đến\n"
+                            "- qlcm: người quản lý chuyên môn (nếu có)"
                         ),
                     },
                 ],
